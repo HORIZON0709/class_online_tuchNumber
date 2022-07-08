@@ -211,6 +211,26 @@ void CObject2D::SetTexture(CTexture::TEXTURE texture)
 }
 
 //================================================
+//テクスチャ座標の設定
+//================================================
+void CObject2D::SetTexUV(float fLeft, float fRight, float fTop, float fBottom)
+{
+	VERTEX_2D *pVtx;	//頂点情報へのポインタ
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//テクスチャ座標の設定
+	pVtx[0].tex = D3DXVECTOR2(fLeft,  fTop);
+	pVtx[1].tex = D3DXVECTOR2(fRight, fTop);
+	pVtx[2].tex = D3DXVECTOR2(fLeft,  fBottom);
+	pVtx[3].tex = D3DXVECTOR2(fRight, fBottom);
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+}
+
+//================================================
 //テクスチャ座標の設定(アニメーションに対応)
 //================================================
 void CObject2D::SetTexUV(const int &nDivNum, const int &nPtnAnim)

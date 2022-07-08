@@ -13,6 +13,9 @@
 
 #include "object2D.h"
 
+#include <stdlib.h>
+#include <time.h>
+
 //***************************
 //定数の定義
 //***************************
@@ -63,6 +66,8 @@ CApplication::~CApplication()
 //================================================
 HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 {
+	srand((unsigned)time(NULL));	//ランダム種子の初期化
+
 	/* テクスチャ */
 
 	if (m_pTexture == nullptr)
@@ -155,6 +160,8 @@ HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 		}
 	}
 
+	Shuffle();
+
 	return S_OK;
 }
 
@@ -205,5 +212,31 @@ void CApplication::Draw()
 	if (m_pRenderer != nullptr)
 	{//NULLチェック
 		m_pRenderer->Draw();	//レンダラー
+	}
+}
+
+//================================================
+//シャッフル
+//================================================
+void CApplication::Shuffle()
+{
+	for (int i = (MAX_POLYGON - 1); i > 0; i--)
+	{
+		int nIdxShuffle = rand() % i;	//「入れ替えられる側」をランダムで選択
+
+		//「入れ替えられる側」の位置
+		D3DXVECTOR3 posSwap = m_apObject[nIdxShuffle]->GetPos();
+
+		//「入れ替える側」の位置
+		D3DXVECTOR3 posWasSwap = m_apObject[i]->GetPos();
+
+		/* 位置の入れ替え */
+
+		//「入れ替える側」--->「入れ替えられる側」に入れる
+		m_apObject[nIdxShuffle]->SetPos(posWasSwap);
+
+		//「入れ替えられる側」--->「入れ替える側」に入れる
+		m_apObject[i]->SetPos(posSwap);
+
 	}
 }

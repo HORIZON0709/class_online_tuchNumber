@@ -48,6 +48,8 @@ public: /* メンバ関数 */
 	void Uninit();	//終了
 	void Update();	//更新
 	void Draw();	//描画
+private:
+	void Shuffle();	//シャッフル
 
 private: /* 静的メンバ変数 */
 	static CTexture* m_pTexture;	//テクスチャのポインタ

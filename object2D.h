@@ -59,7 +59,12 @@ public: /* オーバーライド関数 */
 
 public: /* メンバ関数 */
 	void SetTexture(CTexture::TEXTURE texture);				//テクスチャの設定
-	void SetTexUV(const int &nDivNum, const int &nPtnAnim);	//テクスチャ座標の設定(アニメーション対応)
+	
+	//テクスチャ座標の設定
+	void SetTexUV(float fLeft, float fRight, float fTop, float fBottom);
+
+	//テクスチャ座標の設定(アニメーション対応)
+	void SetTexUV(const int &nDivNum, const int &nPtnAnim);
 
 private: /* メンバ変数 */
 	LPDIRECT3DTEXTURE9 m_pTexture;		//テクスチャへのポインタ
