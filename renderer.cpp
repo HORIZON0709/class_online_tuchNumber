@@ -112,11 +112,9 @@ HRESULT CRenderer::Init(HWND hWnd, BOOL bWindow)
 	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
 
-#ifdef _DEBUG
 	//デバッグ情報表示用フォントの生成
 	D3DXCreateFont(m_pD3DDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
 		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, _T("Terminal"), &m_pFont);
-#endif
 
 	return S_OK;
 }
@@ -126,14 +124,12 @@ HRESULT CRenderer::Init(HWND hWnd, BOOL bWindow)
 //================================================
 void CRenderer::Uninit()
 {
-#ifdef _DEBUG
 	//デバッグ情報表示用フォントの破棄
 	if (m_pFont != nullptr)
 	{
 		m_pFont->Release();
 		m_pFont = nullptr;
 	}
-#endif //_DEBUG
 
 	//デバイスの破棄
 	if (m_pD3DDevice != nullptr)
@@ -163,6 +159,8 @@ void CRenderer::Update()
 //================================================
 void CRenderer::Draw()
 {
+	CApplication* pApplication = nullptr;
+
 	//バックバッファ＆Ｚバッファのクリア
 	m_pD3DDevice->Clear(0, NULL,
 		(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),
@@ -176,10 +174,10 @@ void CRenderer::Draw()
 #ifdef _DEBUG
 		//FPS表示
 		DrawFPS();
+#endif //_DEBUG
 
 		//経過時間表示
-		CApplication::DrawTime(m_pFont);
-#endif //_DEBUG
+		pApplication->DrawTime(m_pFont);
 
 		//Direct3Dによる描画の終了
 		m_pD3DDevice->EndScene();
