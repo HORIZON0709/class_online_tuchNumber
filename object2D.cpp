@@ -203,6 +203,55 @@ D3DXVECTOR3 CObject2D::GetPos()
 }
 
 //================================================
+//サイズの設定
+//================================================
+void CObject2D::SetSize(const D3DXVECTOR2 &size)
+{
+	m_size = size;	//サイズの設定
+
+	VERTEX_2D *pVtx;	//頂点情報へのポインタ
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	float fWidthHalf = (m_size.x * 0.5f);	//横幅の半分
+	float fHeightHalf = (m_size.y * 0.5f);	//縦幅の半分
+
+	//頂点情報を設定
+	pVtx[0].pos = m_pos + D3DXVECTOR3(-fWidthHalf, -fHeightHalf, 0.0f);
+	pVtx[1].pos = m_pos + D3DXVECTOR3(+fWidthHalf, -fHeightHalf, 0.0f);
+	pVtx[2].pos = m_pos + D3DXVECTOR3(-fWidthHalf, +fHeightHalf, 0.0f);
+	pVtx[3].pos = m_pos + D3DXVECTOR3(+fWidthHalf, +fHeightHalf, 0.0f);
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+}
+
+//================================================
+//サイズの取得
+//================================================
+D3DXVECTOR2 CObject2D::GetSize()
+{
+	return m_size;
+}
+
+//================================================
+//移動量の設定
+//================================================
+void CObject2D::SetMove(const D3DXVECTOR3 &move)
+{
+	m_move = move;
+}
+
+//================================================
+//移動量の取得
+//================================================
+D3DXVECTOR3 CObject2D::GetMove()
+{
+	return m_move;
+}
+
+//================================================
 //テクスチャの設定
 //================================================
 void CObject2D::SetTexture(CTexture::TEXTURE texture)
@@ -250,53 +299,4 @@ void CObject2D::SetTexUV(const int &nDivNum, const int &nPtnAnim)
 
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
-}
-
-//================================================
-//サイズの設定
-//================================================
-void CObject2D::SetSize(const D3DXVECTOR2 &size)
-{
-	m_size = size;	//サイズの設定
-
-	VERTEX_2D *pVtx;	//頂点情報へのポインタ
-
-	//頂点バッファをロックし、頂点情報へのポインタを取得
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-	float fWidthHalf = (m_size.x * 0.5f);	//横幅の半分
-	float fHeightHalf = (m_size.y * 0.5f);	//縦幅の半分
-
-	//頂点情報を設定
-	pVtx[0].pos = m_pos + D3DXVECTOR3(-fWidthHalf, -fHeightHalf, 0.0f);
-	pVtx[1].pos = m_pos + D3DXVECTOR3(+fWidthHalf, -fHeightHalf, 0.0f);
-	pVtx[2].pos = m_pos + D3DXVECTOR3(-fWidthHalf, +fHeightHalf, 0.0f);
-	pVtx[3].pos = m_pos + D3DXVECTOR3(+fWidthHalf, +fHeightHalf, 0.0f);
-
-	//頂点バッファをアンロックする
-	m_pVtxBuff->Unlock();
-}
-
-//================================================
-//サイズの取得
-//================================================
-D3DXVECTOR2 CObject2D::GetSize()
-{
-	return m_size;
-}
-
-//================================================
-//移動量の設定
-//================================================
-void CObject2D::SetMove(const D3DXVECTOR3 &move)
-{
-	m_move = move;
-}
-
-//================================================
-//移動量の取得
-//================================================
-D3DXVECTOR3 CObject2D::GetMove()
-{
-	return m_move;
 }
