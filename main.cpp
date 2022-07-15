@@ -185,6 +185,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpC
 //=============================================================================
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	CApplication* pApplication = nullptr;	//アプリケーションのポインタ
+
+	D3DXVECTOR2 pos;	//位置設定用
+
 	switch (uMsg)
 	{
 	case WM_CREATE:
@@ -204,6 +208,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 
+	case WM_LBUTTONDOWN:
+
+		//位置を設定
+		pos = D3DXVECTOR2(LOWORD(lParam), HIWORD(lParam));
+
+		//タッチ
+		pApplication->Touch(pos);
+		break;
 	default:
 		break;
 	}

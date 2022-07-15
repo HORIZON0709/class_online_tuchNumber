@@ -38,7 +38,8 @@ public: /* 静的メンバ関数 */
 	static CTexture* GetTexture();		//テクスチャ情報を取得
 	static CRenderer* GetRenderer();	//レンダラー情報を取得
 
-	static void DrawTime(LPD3DXFONT pFont);	//時間を表示
+	static void DrawTime(LPD3DXFONT pFont);		//時間を表示
+	static void Touch(const D3DXVECTOR2 &pos);	//タッチした座標を受け取る
 
 public: /* コンストラクタ・デストラクタ */
 	CApplication();
@@ -51,7 +52,7 @@ public: /* メンバ関数 */
 	void Update();	//更新
 	void Draw();	//描画
 private:
-	void Shuffle();						//シャッフル
+	void Shuffle();	//シャッフル
 
 private: /* 静的メンバ変数 */
 	static CTexture* m_pTexture;	//テクスチャのポインタ
@@ -63,5 +64,7 @@ private: /* 静的メンバ変数 */
 	static DWORD m_dwGameTime;		//ゲーム経過時間
 
 	static bool m_bEndGame;	//終了フラグ
+
+	static int m_nTouchCount;	//次にタッチする数字(1～25)
 };
 #endif

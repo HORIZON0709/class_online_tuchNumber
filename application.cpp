@@ -37,6 +37,8 @@ DWORD CApplication::m_dwGameTime = {};		//ゲーム経過時間
 
 bool CApplication::m_bEndGame = false;	//終了フラグ
 
+int CApplication::m_nTouchCount = 0;	//次にタッチする数字(1～25)
+
 //================================================
 //テクスチャ情報を取得
 //================================================
@@ -74,6 +76,61 @@ void CApplication::DrawTime(LPD3DXFONT pFont)
 
 		//テキスト描画
 		pFont->DrawText(NULL, str, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+		return;
+	}
+
+	/* ゲームが終了している場合 */
+
+	//ゲーム結果の表示
+	sprintf(str, ("あなたのタイム : %.3f\n"), (float)(m_dwGameTime * 0.001f));
+
+	//テキスト描画
+	pFont->DrawText(NULL, str, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+}
+
+//================================================
+//タッチした座標を受け取る
+//================================================
+void CApplication::Touch(const D3DXVECTOR2 &pos)
+{
+	if (m_bEndGame)
+	{//ゲーム終了している場合
+		return;
+	}
+
+	/* ゲーム終了していない場合 */
+
+	for (int i = 0; i < MAX_POLYGON; i++)
+	{
+		if (i != m_nTouchCount)
+		{//カウントが現在の番号ではない場合
+			continue;
+		}
+
+		/* カウントが現在の番号の場合 */
+
+		D3DXVECTOR3 posObj =  m_apObject[i]->GetPos();	//オブジェクトの位置を取得
+		float fSizeHalf = (POLYGON_SIZE * 0.5f);		//サイズの半分
+
+		//判定用の範囲を設定
+		float fLeft		= (posObj.x - fSizeHalf);	//左端
+		float fRight	= (posObj.x + fSizeHalf);	//右端
+		float fTop		= (posObj.y - fSizeHalf);	//上端
+		float fBottom	= (posObj.y + fSizeHalf);	//下端
+
+		//「タッチした座標が、ポリゴンの範囲より大きいか小さいか」という判定
+		bool bLargeOrSmall_Left		= (pos.x > fLeft);		//左端
+		bool bLargeOrSmall_Right	= (pos.x < fRight);		//右端
+		bool bLargeOrSmall_Top		= (pos.y > fTop);		//上端
+		bool bLargeOrSmall_Bottom	= (pos.y < fBottom);	//下端
+
+		if (bLargeOrSmall_Left && bLargeOrSmall_Right &&	//左右
+			bLargeOrSmall_Top && bLargeOrSmall_Bottom)		//上下
+		{//全ての判定がtrueの時
+			m_apObject[i]->Release();	//解放
+			m_nTouchCount++;			//次にタッチする数字を更新
+			break;
+		}
 	}
 }
 
@@ -239,6 +296,11 @@ void CApplication::Update()
 	{//ゲーム終了していない場合
 		//ゲーム経過時間を計算(更新)
 		m_dwGameTime = (timeGetTime() - m_dwGameStartTime);
+	}
+
+	if (m_nTouchCount == MAX_POLYGON)
+	{//全てのポリゴンをタッチしたら
+		m_bEndGame = true;	//ゲームを終了フラグを立てる
 	}
 }
 
