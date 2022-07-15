@@ -176,6 +176,9 @@ void CRenderer::Draw()
 #ifdef _DEBUG
 		//FPS表示
 		DrawFPS();
+
+		//経過時間表示
+		CApplication::DrawTime(m_pFont);
 #endif //_DEBUG
 
 		//Direct3Dによる描画の終了

@@ -15,6 +15,7 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include <stdio.h>
 
 //***************************
 //定数の定義
@@ -31,6 +32,11 @@ CRenderer* CApplication::m_pRenderer = nullptr;	//レンダラー
 
 CObject2D* CApplication::m_apObject[MAX_POLYGON] = {};	//2Dオブジェクト
 
+DWORD CApplication::m_dwGameStartTime = {};	//ゲーム開始時刻
+DWORD CApplication::m_dwGameTime = {};		//ゲーム経過時間
+
+bool CApplication::m_bEndGame = false;	//終了フラグ
+
 //================================================
 //テクスチャ情報を取得
 //================================================
@@ -45,6 +51,30 @@ CTexture* CApplication::GetTexture()
 CRenderer* CApplication::GetRenderer()
 {
 	return m_pRenderer;
+}
+
+//================================================
+//時間の表示
+//================================================
+void CApplication::DrawTime(LPD3DXFONT pFont)
+{
+	RECT rect = 
+	{//表示エリアの座標
+		(int)(CRenderer::SCREEN_WIDTH * 0.43f),	//Left
+		20,										//Top
+		CRenderer::SCREEN_WIDTH,				//Right
+		CRenderer::SCREEN_HEIGHT				//Bottom
+	};
+
+	TCHAR str[256];
+
+	if (!m_bEndGame)
+	{//ゲーム終了していない場合
+		sprintf(str, ("経過時間 : %.3f\n"), (float)(m_dwGameTime * 0.001f));
+
+		//テキスト描画
+		pFont->DrawText(NULL, str, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+	}
 }
 
 //================================================
@@ -160,7 +190,9 @@ HRESULT CApplication::Init(HWND hWnd, BOOL bWindow, HINSTANCE hInstance)
 		}
 	}
 
-	Shuffle();
+	Shuffle();	//シャッフル
+
+	m_dwGameStartTime = timeGetTime();	//ゲーム開始時刻を設定
 
 	return S_OK;
 }
@@ -201,6 +233,12 @@ void CApplication::Update()
 	if (m_pRenderer != nullptr)
 	{//NULLチェック
 		m_pRenderer->Update();	//レンダラー
+	}
+
+	if (!m_bEndGame)
+	{//ゲーム終了していない場合
+		//ゲーム経過時間を計算(更新)
+		m_dwGameTime = (timeGetTime() - m_dwGameStartTime);
 	}
 }
 
