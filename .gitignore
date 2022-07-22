@@ -240,3 +240,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/tcp_client.cpp
+/tcp_client.h
+/tcp_listener.cpp
+/tcp_listener.h

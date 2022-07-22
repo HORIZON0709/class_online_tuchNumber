@@ -1,6 +1,6 @@
 //================================================
 //
-//制作実践基礎[application.h]
+//タッチナンバー[application.h]
 //Author:Kishimoto Eiji
 //
 //================================================
@@ -324,19 +324,19 @@ void CApplication::Shuffle()
 	{
 		int nIdxShuffle = rand() % i;	//「入れ替えられる側」をランダムで選択
 
-		//「入れ替えられる側」の位置
-		D3DXVECTOR3 posSwap = m_apObject[nIdxShuffle]->GetPos();
-
 		//「入れ替える側」の位置
-		D3DXVECTOR3 posWasSwap = m_apObject[i]->GetPos();
+		D3DXVECTOR3 posSwap = m_apObject[i]->GetPos();
+
+		//「入れ替えられる側」の位置
+		D3DXVECTOR3 posIsSwap = m_apObject[nIdxShuffle]->GetPos();
 
 		/* 位置の入れ替え */
 
-		//「入れ替える側」--->「入れ替えられる側」に入れる
-		m_apObject[nIdxShuffle]->SetPos(posWasSwap);
+		//「入れ替えられる側の位置」に「入れ替える側の位置」を入れる
+		m_apObject[nIdxShuffle]->SetPos(posSwap);
 
-		//「入れ替えられる側」--->「入れ替える側」に入れる
-		m_apObject[i]->SetPos(posSwap);
+		//「入れ替える側の位置」に「入れ替えられる側の位置」を入れる
+		m_apObject[i]->SetPos(posIsSwap);
 
 	}
 }

@@ -164,6 +164,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="object2D.h" />
+    <ClInclude Include="protocol_ranking.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>

@@ -42,7 +42,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 //***************************
 namespace
 {
-int s_nCountFPS;	//FPSカウンタ
+int s_nCountFPS;			//FPSカウンタ
+int s_aRankingData[5] = {};	//ランキングデータ格納用
 }//namespaceはここまで
 
  //=============================================================================
